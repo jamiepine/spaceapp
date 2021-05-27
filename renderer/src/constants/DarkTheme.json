@@ -1,0 +1,16 @@
+{
+  "background": "#1D1D24",
+  "sidebar": "#292935",
+  "text": "#C0C0D4",
+  "button": "#444455",
+  "buttonFaint": "#31313E",
+  "border": "#525267",
+  "borderLight": "#62627B",
+  "borderDark": "#16161C",
+  "textFaint": "#8484A5",
+  "file": "#24242D",
+  "fileHover": "#2C2C3A",
+  "fileBorder": "#30303E",
+  "headerBackground": "#262630",
+  "headerButton": "#373746"
+}
