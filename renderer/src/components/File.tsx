@@ -7,7 +7,8 @@ import {
   Gif,
   VideoCamera,
   Cube,
-  Folder
+  Folder,
+  LockSimple
 } from 'phosphor-react';
 import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
@@ -29,12 +30,13 @@ export const File: React.FC<{ file?: IFile | Directory }> = (props) => {
         <FileContainer selected={selected}>
           {Number(file.thumbnail) ? (
             <img
-              alt={file.file_name}
+              alt={''}
               src={`file://${appDataPath}/data/thumbnails/${file.integrity_hash}.jpg`}
             />
           ) : (
             (() => {
               if (file.mime === 'directory') return <Folder />;
+              if (file.file_name.endsWith('.icloud')) return <Cloud />;
               switch (file.extension) {
                 case 'png':
                   return <ImageSquare />;
@@ -52,8 +54,8 @@ export const File: React.FC<{ file?: IFile | Directory }> = (props) => {
                   return <VideoCamera />;
                 case 'gif':
                   return <Gif />;
-                case undefined:
-                  return <Cloud />;
+                case 'encrypted':
+                  return <LockSimple />;
 
                 default:
                   return <FileText />;

@@ -18,8 +18,8 @@ function options(dbName: string): ConnectionOptions {
     type: 'sqlite',
     database: `${appDataPath}/data/${dbName}.sqlite`,
     entities: [File],
-    logging: false,
-    synchronize: true
+    logging: false
+    // synchronize: true
   };
 }
 
@@ -38,9 +38,12 @@ async function main() {
   if (!exists) await initDataFolder();
 
   const connection = await createConnection(options('app_data'));
-  // const connection = false;
+
+  connection.synchronize();
 
   const drives = await getDrives();
+
+  console.log({ drives });
 
   // const readPath = '/Users/jamie/Downloads';
   async function Refresh() {
@@ -50,26 +53,77 @@ async function main() {
 
   Refresh();
 
-  ipcRenderer.on('ingest-file', async (e, files) => {
-    console.log({ files });
-    await connection
-      .createQueryBuilder()
-      .insert()
-      .into(File)
-      .values(files)
-      .onConflict(`("uri") DO NOTHING`)
-      .execute();
+  ipcRenderer.on('ingest-scanned-directory', async (e, data) => {
+    ingestFiles(data.files);
+  });
+
+  ipcRenderer.on('update-file', async (e, data) => {
+    if (data.file?.id) {
+      console.log('UPDATING FILE', data.file);
+
+      await connection
+        .createQueryBuilder()
+        .update(File)
+        .set({
+          extension: data.file.extension,
+          uri: data.file.uri,
+          encryption_method: data.file.encryption_method || null
+        })
+        .where('id = :id', { id: data.file.id })
+        .execute();
+
+      FileCollection.update(data.file.id, data);
+    }
+  });
+
+  ipcRenderer.on('replace-file', async (e, data) => {
+    if (data.file?.id) {
+      console.log('REPLACING FILE', data.file);
+
+      const nullified_file: Partial<IFile> = {};
+
+      Object.keys(new File()).forEach((key) => (nullified_file[key] = null));
+
+      const file = {
+        ...nullified_file,
+        ...data.file,
+        date_created: new Date(),
+        date_modified: new Date(),
+        date_indexed: new Date()
+      };
+
+      await connection
+        .createQueryBuilder()
+        .update(File)
+        .set(file)
+        .where('id = :id', { id: data.file.id })
+        .execute();
+
+      FileCollection.collect(file);
+    }
+  });
+
+  ipcRenderer.on('status-event', (e, data) => {
+    console.log(data);
+  });
+
+  async function ingestFiles(files: File[]) {
+    let batchedFiles: File[] = [];
+
+    if (!Array.isArray(files)) return;
+
+    if (files.length >= 500) batchedFiles = files.splice(0, 500);
+    else {
+      batchedFiles = files;
+      files = [];
+    }
+    console.log({ batchedFiles });
+
+    await connection.createQueryBuilder().insert().into(File).values(batchedFiles).execute();
     Refresh();
-  });
-  ipcRenderer.on('load-file', (e, fileURI) => {
-    console.log(fileURI);
-  });
-
-  // console.log(result.raw);
-
-  // console.log(fileList);
-
-  // analyzeFile('/Users/jamie/Desktop/haha.png');
+    // ingest remaining files
+    if (files.length > 0) ingestFiles(files);
+  }
 }
 
 main().catch(console.error);

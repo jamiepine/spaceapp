@@ -8,7 +8,7 @@ export const SearchBox: React.FC = (props) => {
 const SearchBoxContainer = styled.input.attrs({
   placeholder: 'Search'
 })`
-  border: 1px solid ${(props) => props.theme.border};
+  border: 1px solid ${(props) => props.theme.headerBorder};
   border-radius: 5px;
   width: 200px;
   background-color: ${(props) => props.theme.headerButton};
@@ -23,7 +23,7 @@ const SearchBoxContainer = styled.input.attrs({
   }
   &:focus {
     width: 300px;
-    background-color: ${(props) => props.theme.button};
+    background-color: ${(props) => props.theme.headerSearchFocus};
     /* border: 1px solid ${(props) => props.theme.borderLight}; */
   }
 `;

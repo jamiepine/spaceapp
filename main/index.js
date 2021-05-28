@@ -40,7 +40,7 @@ function createWindow() {
     height: 928,
     minWidth: 800,
     minHeight: 750,
-    backgroundColor: '#2C2C34',
+    backgroundColor: '#292935',
     frame: false,
     webPreferences: {
       enableRemoteModule: true,
@@ -52,6 +52,8 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js')
     }
   });
+
+  require('electron-traffic-light')(mainWindow);
 
   mainWindow.setMenuBarVisibility(true); ////THIS REMOVES THE HEADER MENU
 
@@ -148,29 +150,36 @@ app.on('activate', function () {
   }
 });
 
-const child = fork(path.join(__dirname, 'scan.js'), ['hello'], {
-  stdio: ['pipe', 'pipe', 'pipe', 'ipc']
-});
+const processes = ['scan', 'encrypt'];
 
-ipcMain.on('scan-files', (e, data) => {
-  data.app_data_path = app.getAppPath();
+function registerChildProcess(name) {
+  const child = fork(path.join(__dirname, `${name}.js`), ['hello'], {
+    stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+  });
 
-  child.send(data);
+  if (child) console.log('CHILD PROCESS ONLINE: ', name);
+  let event;
+  ipcMain.on(name, (e, data) => {
+    event = e;
+    data.app_data_path = app.getAppPath();
+    child.send(data);
+  });
 
   child.on('error', (err) => {
     console.log('ERROR: spawn failed! (' + err + ')');
   });
 
   child.stderr.on('data', function (data) {
-    // console.log('stdout: ' + data);
+    console.log('stdout: ' + data);
   });
 
-  child.on('message', (data) => {
-    if (typeof data === 'string') e.sender.send('load-file', data);
-    else e.sender.send('ingest-file', data);
+  child.on('message', (data, sendHandle) => {
+    if (!data?.type) return console.log({ data });
+    event.sender.send(data.type, data);
   });
 
   child.on('exit', function (code, signal) {
-    console.log(`child process exited with code ${code} and signal ${signal}`);
+    console.log(`Child process "${name}" exited with code ${code} and signal ${signal}`);
   });
-});
+}
+processes.forEach(registerChildProcess);

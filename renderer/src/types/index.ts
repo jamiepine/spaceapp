@@ -37,6 +37,7 @@ export interface File {
   size: number;
   extension: string;
   mime: string;
+  encryption_method?: string;
   date_created: Date;
   date_modified: Date;
   date_indexed: Date;

@@ -100,14 +100,18 @@
     "@pulsejs/react": "^3.5.8",
     "drivelist": "^9.2.4",
     "electron-is-dev": "^1.2.0",
+    "electron-traffic-light": "^0.0.1",
     "exifr": "^7.0.0",
     "file-type": "^16.4.0",
     "fs-thumbnail": "^1.0.9",
     "phosphor-react": "^1.2.1",
+    "react-router-transition": "^2.1.0",
+    "react-transition-group": "^4.4.1",
     "react-virtualized": "^9.22.3",
     "reflect-metadata": "^0.1.13",
     "sharp": "0",
     "sqlite3": "^5.0.2",
+    "tmp": "^0.2.1",
     "typeorm": "^0.2.32"
   },
   "eslintConfig": {

@@ -7,31 +7,41 @@ const ThumbnailGenerator = require('fs-thumbnail');
 
 const stat = util.promisify(fs.stat);
 const readdir = util.promisify(fs.readdir);
+const readFile = util.promisify(fs.readFile);
 
 const thumbGen = new ThumbnailGenerator({ verbose: false, size: [100, 100], quality: 50 });
 
 process.on('message', async (data) => {
-  const { readPath, app_data_path } = data;
   let files = [];
-  const dir = await readdir(readPath);
-  for (const fileName of dir) {
-    const file = await analyzeFile(app_data_path, `${readPath}/${fileName}`, fileName);
-    files.push(file);
+  const { directory, file_path, app_data_path } = data;
+  if (directory) {
+    const dir = await readdir(directory);
+    for (const fileName of dir) {
+      if (fileName.startsWith('.')) continue;
+      const file = await analyzeFile(app_data_path, `${directory}/${fileName}`, fileName);
+      files.push(file);
+    }
+    process.send({ type: 'ingest-scanned-directory', files });
+  } else if (file_path) {
+    const file = await analyzeFile(app_data_path, file_path);
+    process.send({ type: 'ingest-scanned-file', file });
   }
-  process.send(files);
 });
 
-async function analyzeFile(app_data_path, uri, file_name) {
+async function analyzeFile(app_data_path, file_path, file_name) {
   try {
-    process.send(uri);
-    const stats = await stat(uri);
+    process.send({ type: 'status-event', data: { type: 'scan-file', file: { uri: file_path } } });
+
+    if (!file_name) file_name = file_path.split('/').pop();
+
+    const stats = await stat(file_path);
 
     // for directories
     if (!stats.isFile()) {
       return {
         integrity_hash: cryptoM.createHash('sha256').update(stats.uid.toString()).digest('hex'),
         file_name,
-        uri,
+        uri: file_path,
         mime: 'directory',
         size: stats?.size,
         date_created: stats.ctime,
@@ -39,7 +49,22 @@ async function analyzeFile(app_data_path, uri, file_name) {
       };
     }
 
-    const fileBuffer = await fs.readFileSync(uri);
+    // read the first 10,000 bytes to create hash and get file type
+    let fileBuffer;
+    const stream = fs.createReadStream(file_path, {
+      start: 0,
+      end: 1000
+    });
+    await new Promise((resolve, reject) => {
+      stream.on('data', async (data) => {
+        fileBuffer = data;
+        resolve();
+      });
+      stream.on('error', async (data) => {
+        reject();
+      });
+    });
+    // const fileBuffer = await readFile(file_path);
 
     const file_type = await fileType.fromBuffer(fileBuffer);
 
@@ -60,7 +85,7 @@ async function analyzeFile(app_data_path, uri, file_name) {
           thumbnail = true;
 
           thumbGen.getThumbnail({
-            path: uri,
+            path: file_path,
             output: thumbURI
           });
         }
@@ -71,10 +96,10 @@ async function analyzeFile(app_data_path, uri, file_name) {
       // id: integrity_hash || '' + file_name,
       file_name,
       thumbnail,
-      uri,
+      uri: file_path,
       integrity_hash,
       size: stats?.size,
-      extension: file_type?.ext,
+      extension: file_type?.ext || file_path?.split('.').pop(),
       mime: file_type?.mime || 'unknown',
       date_created: stats?.ctime,
       date_modified: stats?.mtime,

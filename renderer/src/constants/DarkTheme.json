@@ -12,5 +12,8 @@
   "fileHover": "#2C2C3A",
   "fileBorder": "#30303E",
   "headerBackground": "#262630",
-  "headerButton": "#373746"
+  "headerButton": "#373746",
+  "headerBorder": "#525267",
+  "headerButtonFaint": "#404050",
+  "headerSearchFocus": "#444455"
 }

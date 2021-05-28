@@ -7,6 +7,7 @@ import { File } from '../components/File';
 import { AppState, FileCollection } from '../core/state';
 import '../database';
 import { EncryptedBar } from '../components/EncryptedBar';
+import SideBar from '../components/Sidebar';
 
 globalThis.FileCollection = FileCollection;
 
@@ -17,27 +18,36 @@ const Main = () => {
   const selected = usePulse(AppState.SELECTED_FILE);
 
   return (
-    <SelectedFileContext.Provider value={selected}>
-      <Container>
-        <HeaderBar />
-        {/* <EncryptedBar /> */}
-        {useMemo(() => {
-          return (
-            <Content>
-              {files.map((file) => {
-                return <File key={file.id} file={file} />;
-              })}
-            </Content>
-          );
-        }, [files])}
-      </Container>
-    </SelectedFileContext.Provider>
+    <FileViewContainer>
+      <SideBar />
+      <SelectedFileContext.Provider value={selected}>
+        <ContentContainer>
+          <HeaderBar />
+          {/* <EncryptedBar /> */}
+          {useMemo(() => {
+            return (
+              <Content>
+                {files.map((file) => {
+                  return <File key={file.id} file={file} />;
+                })}
+              </Content>
+            );
+          }, [files])}
+        </ContentContainer>
+      </SelectedFileContext.Provider>
+    </FileViewContainer>
   );
 };
 
 export default withRouter(Main);
 
-const Container = styled.div`
+const FileViewContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+`;
+const ContentContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;

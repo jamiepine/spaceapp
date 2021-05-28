@@ -20,5 +20,8 @@ declare module 'styled-components' {
     fileBorder: string;
     headerBackground: string;
     headerButton: string;
+    headerButtonFaint: string;
+    headerSearchFocus: string;
+    headerBorder: string;
   }
 }

@@ -1,0 +1,19 @@
+{
+  "background": "#1e1e27",
+  "sidebar": "#16161d",
+  "text": "#C0C0D4",
+  "button": "#2e2e42",
+  "buttonFaint": "#21212d",
+  "border": "#3d3d58",
+  "borderLight": "#62627B",
+  "borderDark": "#16161C",
+  "textFaint": "#8484A5",
+  "file": "#24242f",
+  "fileHover": "#2C2C3A",
+  "fileBorder": "#30303E",
+  "headerBackground": "#23232d",
+  "headerButton": "#373746",
+  "headerBorder": "#454558",
+  "headerButtonFaint": "#2e2e3a",
+  "headerSearchFocus": "#414154"
+}

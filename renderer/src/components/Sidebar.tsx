@@ -31,13 +31,18 @@ const RenderButton: React.FC<{ id: string; icon: any; name: string }> = (props) 
 const SideBar: React.FC = (props) => {
   return (
     <SideBarContainer>
+      <div style={{ marginTop: 40 }} />
       <SideBarCategoryTitle>YOUR SPACE</SideBarCategoryTitle>
-      <RenderButton id="spaces" name="Spaces" icon={CirclesFour} />
+      <RenderButton
+        id="spaces"
+        name="Spaces"
+        icon={() => <img style={{ marginRight: 10, marginLeft: -5 }} width={20} src="logo.svg" />}
+      />
       <RenderButton id="storage" name="Storage" icon={Cube} />
       <RenderButton id="files" name="Files" icon={Note} />
       <RenderButton id="media" name="Media" icon={ImageSquare} />
       <RenderButton id="people" name="People" icon={User} />
-      <RenderButton id="recents" name="Recents" icon={ClockClockwise} />
+      <RenderButton id="timeline" name="Timeline" icon={ClockClockwise} />
       <RenderButton id="legacy" name="Legacy" icon={HourglassSimple} />
       <RenderButton id="settings" name="Settings" icon={GearSix} />
       <SideBarCategoryTitle>PINS</SideBarCategoryTitle>

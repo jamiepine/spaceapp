@@ -49,6 +49,12 @@ body {
   font-size: 1.2rem;
   overflow: hidden;
 }
+#drag-bar {
+  display: none;
+}
+#traffic-light {
+  top: 11px !important;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
