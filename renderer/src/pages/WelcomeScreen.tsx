@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const colors = ['#1d235473', '#ff0a0a45', '#fff70a45', '#30ff0a45'];
+const colors = ['#0c0f2b', '#ff0a0a45', '#fff70a45', '#30ff0a45'];
 
 export const WelcomeScreen: React.FC = () => {
   const [color, setColor] = useState(colors[0]);
   return (
     <WelcomeScreenContainer>
       <ContentContainer>
-        <img src="logo.svg" />
-        <h1>SPACE</h1>
+        <img src="logo-glow.svg" />
+        <h1>Space</h1>
         <span>v0.0.12</span>
-        <p>Space is storage and file sharing re-imagined.</p>
+        <p>Storage and file sharing re-imagined.</p>
         <Link to="/files">
           <button type="button">Get Started</button>
         </Link>
@@ -35,7 +35,7 @@ const WelcomeScreenBG2 = styled.div`
   position: absolute;
   height: 100vh;
   width: 100%;
-  opacity: 0.1;
+  opacity: 0.3;
   background-image: url('bg.jpg');
   background-position: center;
   background-size: cover;
@@ -44,8 +44,8 @@ const WelcomeScreenBG = styled.div`
   position: absolute;
   height: 100vh;
   width: 100%;
-  filter: blur(12px);
-  -webkit-filter: blur(12px);
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
   background-image: url('bg.jpg');
   background-position: center;
   background-size: cover;
@@ -58,12 +58,18 @@ const ContentContainer = styled.div`
   z-index: 99;
   text-align: center;
   h1 {
-    margin-top: 20px;
     font-size: 50px;
+    margin-top: -30px;
+  }
+  img {
+    transition: 500ms;
+    :hover {
+      transform: scale(1.05);
+    }
   }
   p {
     margin-top: 20px;
-    font-size: 20px;
+    font-size: 25px;
   }
   span {
     opacity: 0.4;
@@ -73,12 +79,12 @@ const ContentContainer = styled.div`
   }
   button {
     border-radius: 6px;
-    padding: 10px 20px;
+    padding: 15px 25px;
     border: 1px solid transparent;
     margin: auto;
-    margin-top: 30px;
+    margin-top: 60px;
     line-height: 17px;
-    font-size: 19px;
+    font-size: 23px;
     font-weight: 600;
     cursor: pointer;
     outline: none;
