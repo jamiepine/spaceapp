@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 import { createConnection, ConnectionOptions } from 'typeorm';
-import { getDrives } from '../core/drives';
+// import { getDrives } from '../core/drives';
 import { FileCollection } from '../core/state';
 import { File } from './models/File';
 import { File as IFile } from '../types';
@@ -41,9 +41,9 @@ async function main() {
 
   connection.synchronize();
 
-  const drives = await getDrives();
+  // const drives = await getDrives();
 
-  console.log({ drives });
+  // console.log({ drives });
 
   // const readPath = '/Users/jamie/Downloads';
   async function Refresh() {

@@ -1,8 +1,9 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { HashRouter as Router, Switch, Route, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, useLocation, Redirect } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import defaultTheme from './constants/DefaultTheme.json';
+// import blackTheme from './constants/BlackTheme.json';
 import darkTheme from './constants/DarkTheme.json';
 import FileView from './pages/FileView';
 import { WelcomeScreen } from './pages/WelcomeScreen';
@@ -13,25 +14,27 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Container>
-          <SwitchStack />
+          <MainStack />
         </Container>
       </Router>
     </ThemeProvider>
   );
 }
 
-const SwitchStack = () => {
+const MainStack = () => {
   let location = useLocation();
 
   return (
-    <TransitionGroup>
-      <CSSTransition timeout={300} key={location.pathname} classNames="page">
-        <Switch location={location}>
-          <Route path="/welcome" children={<WelcomeScreen />} />
-          <Route path="/files" children={<FileView />} />
-        </Switch>
-      </CSSTransition>
-    </TransitionGroup>
+    <Router>
+      <TransitionGroup>
+        <CSSTransition timeout={300} key={location.pathname} classNames="page">
+          <Switch location={location}>
+            <Route path="/welcome" children={<WelcomeScreen />} />
+            <Route path="/files" children={<FileView />} />
+          </Switch>
+        </CSSTransition>
+      </TransitionGroup>
+    </Router>
   );
 };
 
@@ -42,5 +45,4 @@ const Container = styled.div`
   overflow: hidden;
   background-color: ${(props) => props.theme.background};
   color: ${(props) => props.theme.text};
-  /* flex-direction: column; */
 `;

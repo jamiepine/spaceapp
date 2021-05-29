@@ -7,3 +7,4 @@ build
 bundle
 .vscode
 data
+.DS_Store
