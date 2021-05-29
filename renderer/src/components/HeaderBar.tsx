@@ -45,7 +45,7 @@ export const HeaderBar: React.FC = (props) => {
   return (
     <HeaderBarContainer>
       <RightButtonArea>
-        <Link to="/">
+        <Link to="/welcome">
           <RightButtonContainer style={{ marginRight: 1 }}>
             <HouseSimple />
           </RightButtonContainer>

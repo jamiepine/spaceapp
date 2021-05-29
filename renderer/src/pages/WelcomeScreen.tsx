@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const colors = ['#0c0f2b', '#ff0a0a45', '#fff70a45', '#30ff0a45'];
 
 export const WelcomeScreen: React.FC = () => {
-  const [color, setColor] = useState(colors[0]);
+  const [color] = useState(colors[0]);
+  const [forceLogoHover, setForceLogoHover] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setForceLogoHover(true);
+      setTimeout(() => {
+        setForceLogoHover(false);
+      }, 600);
+    }, 400);
+  }, []);
   return (
     <WelcomeScreenContainer>
-      <ContentContainer>
+      <ContentContainer forceFocus={forceLogoHover}>
         <img src="logo-glow.svg" />
         <h1>Space</h1>
         <span>v0.0.12</span>
@@ -52,7 +61,7 @@ const WelcomeScreenBG = styled.div`
   opacity: 0.5;
 `;
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.div<{ forceFocus?: boolean }>`
   max-width: 600px;
   margin: auto;
   z-index: 99;
@@ -63,6 +72,7 @@ const ContentContainer = styled.div`
   }
   img {
     transition: 500ms;
+    ${(props) => props.forceFocus && `transform: scale(1.05);`}
     :hover {
       transform: scale(1.05);
     }
