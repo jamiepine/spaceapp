@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import { AppState } from '../core/state';
 import { SelectedFileContext } from '../pages/FileView';
 import { Directory, File as IFile } from '../types';
+import { ContextMenu, MenuItem, ContextMenuTrigger, SubMenu } from 'react-contextmenu';
 
 const { remote } = window.require('electron');
 
@@ -26,50 +27,69 @@ export const File: React.FC<{ file?: IFile | Directory }> = (props) => {
   const file = props.file as IFile;
   return useMemo(
     () => (
-      <FileWrapper onClick={() => AppState.SELECTED_FILE.set(file.id)}>
-        <FileContainer selected={selected}>
-          {Number(file.thumbnail) ? (
-            <img
-              alt={''}
-              src={`file://${appDataPath}/data/thumbnails/${file.integrity_hash}.jpg`}
-            />
-          ) : (
-            (() => {
-              if (file.mime === 'directory') return <Folder />;
-              if (file.file_name.endsWith('.icloud')) return <Cloud />;
-              switch (file.extension) {
-                case 'png':
-                  return <ImageSquare />;
-                case 'jpg':
-                  return <ImageSquare />;
-                case 'jpeg':
-                  return <ImageSquare />;
-                case 'mp3':
-                  return <SpeakerSimpleHigh />;
-                case 'zip':
-                  return <Cube />;
-                case 'mp4':
-                  return <VideoCamera />;
-                case 'mov':
-                  return <VideoCamera />;
-                case 'gif':
-                  return <Gif />;
-                case 'encrypted':
-                  return <LockSimple />;
+      <ContextMenuTrigger id="same_unique_identifier">
+        <FileWrapper onClick={() => AppState.SELECTED_FILE.set(file.id)}>
+          <FileContainer selected={selected}>
+            {Number(file.thumbnail) ? (
+              <img
+                alt={''}
+                src={`file://${appDataPath}/data/thumbnails/${file.integrity_hash}.jpg`}
+              />
+            ) : (
+              (() => {
+                if (file.mime === 'directory') return <Folder />;
+                if (file.file_name.endsWith('.icloud')) return <Cloud />;
+                switch (file.extension) {
+                  case 'png':
+                    return <ImageSquare />;
+                  case 'jpg':
+                    return <ImageSquare />;
+                  case 'jpeg':
+                    return <ImageSquare />;
+                  case 'mp3':
+                    return <SpeakerSimpleHigh />;
+                  case 'zip':
+                    return <Cube />;
+                  case 'mp4':
+                    return <VideoCamera />;
+                  case 'mov':
+                    return <VideoCamera />;
+                  case 'gif':
+                    return <Gif />;
+                  case 'encrypted':
+                    return <LockSimple />;
 
-                default:
-                  return <FileText />;
-              }
-            })()
-          )}
-          {file.extension && (
-            <FileExt>
-              <span>{file.extension}</span>
-            </FileExt>
-          )}
-        </FileContainer>
-        <FileName>{file?.file_name}</FileName>
-      </FileWrapper>
+                  default:
+                    return <FileText />;
+                }
+              })()
+            )}
+            {file.extension && (
+              <FileExt>
+                <span>{file.extension}</span>
+              </FileExt>
+            )}
+          </FileContainer>
+          <FileName>{file?.file_name}</FileName>
+          <ContextMenu id="same_unique_identifier">
+            <MenuItem onClick={() => {}}>Open File</MenuItem>
+            <MenuItem onClick={() => {}}>Encrypt</MenuItem>
+            <MenuItem onClick={() => {}}>Compress</MenuItem>
+            <MenuItem divider />
+            <MenuItem onClick={() => {}}>Share</MenuItem>
+            <MenuItem divider />
+
+            <SubMenu title="Move To">
+              <MenuItem onClick={() => {}}>Vault</MenuItem>
+            </SubMenu>
+
+            <MenuItem divider />
+            <MenuItem onClick={() => {}}>Copy</MenuItem>
+            <MenuItem onClick={() => {}}>Move to trash</MenuItem>
+            <MenuItem onClick={() => {}}>Secure Delete</MenuItem>
+          </ContextMenu>
+        </FileWrapper>
+      </ContextMenuTrigger>
     ),
     [selected, file]
   );

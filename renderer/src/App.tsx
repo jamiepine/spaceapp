@@ -3,7 +3,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import { HashRouter as Router, Switch, Route, useLocation, Redirect } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import defaultTheme from './constants/DefaultTheme.json';
-// import blackTheme from './constants/BlackTheme.json';
 import darkTheme from './constants/DarkTheme.json';
 import FileView from './pages/FileView';
 import { WelcomeScreen } from './pages/WelcomeScreen';

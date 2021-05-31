@@ -6,7 +6,6 @@ import { HeaderBar } from '../components/HeaderBar';
 import { File } from '../components/File';
 import { AppState, FileCollection } from '../core/state';
 import '../database';
-import { EncryptedBar } from '../components/EncryptedBar';
 import SideBar from '../components/Sidebar';
 
 globalThis.FileCollection = FileCollection;
