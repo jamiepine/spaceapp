@@ -18,7 +18,7 @@ export const WelcomeScreen: React.FC = () => {
   return (
     <WelcomeScreenContainer>
       <ContentContainer forceFocus={forceLogoHover}>
-        <img src="logo-glow.svg" />
+        <img alt="logo" src="logo-glow.svg" />
         <h1>Space</h1>
         <span>v0.0.12</span>
         <p>Storage and file sharing re-imagined.</p>

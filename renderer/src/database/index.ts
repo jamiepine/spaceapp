@@ -1,14 +1,12 @@
 import 'reflect-metadata';
 
 import { createConnection, ConnectionOptions } from 'typeorm';
-// import { getDrives } from '../core/drives';
 import { FileCollection } from '../core/state';
 import { File } from './models/File';
 import { File as IFile } from '../types';
 
 const electron = window.require('electron');
 const fs = window.require('fs');
-const util = window.require('util');
 const { ipcRenderer } = window.require('electron');
 
 const appDataPath = electron.remote.app.getAppPath();
@@ -126,4 +124,4 @@ async function main() {
   }
 }
 
-// main().catch(console.error);
+main().catch(console.error);

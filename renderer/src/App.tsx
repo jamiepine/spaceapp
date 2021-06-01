@@ -13,7 +13,12 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Container>
-          <MainStack />
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/welcome" />
+            </Route>
+            <Route exact path="*" children={<MainStack />} />
+          </Switch>
         </Container>
       </Router>
     </ThemeProvider>

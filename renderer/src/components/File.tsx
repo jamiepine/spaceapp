@@ -1,4 +1,3 @@
-import { usePulse } from '@pulsejs/react';
 import {
   Cloud,
   FileText,

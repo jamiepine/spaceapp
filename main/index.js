@@ -53,8 +53,6 @@ function createWindow() {
     }
   });
 
-  require('electron-traffic-light')(mainWindow);
-
   mainWindow.setMenuBarVisibility(true); ////THIS REMOVES THE HEADER MENU
 
   if (process.env.NODE_ENV === 'development') {
@@ -150,6 +148,8 @@ app.on('activate', function () {
   }
 });
 
+// require('electron-traffic-light')(mainWindow);
+
 const processes = ['scan', 'encrypt'];
 
 function registerChildProcess(name) {
@@ -158,6 +158,7 @@ function registerChildProcess(name) {
   });
 
   if (child) console.log('CHILD PROCESS ONLINE: ', name);
+
   let event;
   ipcMain.on(name, (e, data) => {
     event = e;

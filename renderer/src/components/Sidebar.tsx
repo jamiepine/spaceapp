@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import SideBarButton from './SidebarButton';
 import {
   Cube,
-  CirclesFour,
   Note,
   ImageSquare,
   User,
@@ -36,7 +35,9 @@ const SideBar: React.FC = (props) => {
       <RenderButton
         id="spaces"
         name="Spaces"
-        icon={() => <img style={{ marginRight: 10, marginLeft: -5 }} width={20} src="logo.svg" />}
+        icon={() => (
+          <img alt="logo" style={{ marginRight: 10, marginLeft: -5 }} width={20} src="logo.svg" />
+        )}
       />
       <RenderButton id="storage" name="Storage" icon={Cube} />
       <RenderButton id="files" name="Files" icon={Note} />

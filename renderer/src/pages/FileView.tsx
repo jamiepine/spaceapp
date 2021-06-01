@@ -1,6 +1,6 @@
 import { usePulse } from '@pulsejs/react';
-import React, { createContext, useEffect, useMemo, useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { createContext, useMemo } from 'react';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { HeaderBar } from '../components/HeaderBar';
 import { File } from '../components/File';
